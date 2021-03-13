@@ -8,11 +8,11 @@ namespace FirLib.Core.Patterns.Messaging
 {
     public class MessageAsyncRoutingTargetsAttribute : Attribute
     {
-        public string[] AsyncTargetThreads { get; }
+        public string[] AsyncTargetMessengers { get; }
 
-        public MessageAsyncRoutingTargetsAttribute(params string[] asyncTargetThreads)
+        public MessageAsyncRoutingTargetsAttribute(params string[] asyncTargetMessengers)
         {
-            this.AsyncTargetThreads = asyncTargetThreads;
+            this.AsyncTargetMessengers = asyncTargetMessengers;
         }
     }
 }

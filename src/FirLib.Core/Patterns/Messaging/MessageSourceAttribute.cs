@@ -8,11 +8,11 @@ namespace FirLib.Core.Patterns.Messaging
 {
     public class MessagePossibleSourceAttribute : Attribute
     {
-        public string[] PossibleSourceThreads { get; }
+        public string[] PossibleSourceMessengers { get; }
 
-        public MessagePossibleSourceAttribute(params string[] possibleSourceThreads)
+        public MessagePossibleSourceAttribute(params string[] possibleSourceMessengers)
         {
-            this.PossibleSourceThreads = possibleSourceThreads;
+            this.PossibleSourceMessengers = possibleSourceMessengers;
         }
     }
 }

@@ -11,9 +11,9 @@ namespace FirLib.Core.Patterns.Messaging
 {
     /// <summary>
     /// Main class for sending/receiving messages.
-    /// This class follows the Messenger pattern but modifies it on some parts like 
-    /// thread synchronization.
-    /// What 'messenger' actually is, see here a short explanation: http://stackoverflow.com/questions/22747954/mvvm-light-toolkit-messenger-uses-event-aggregator-or-mediator-pattern
+    /// This class follows the Messenger pattern but modifies it on some parts like thread synchronization.
+    /// What 'messenger' actually is, see here a short explanation:
+    /// http://stackoverflow.com/questions/22747954/mvvm-light-toolkit-messenger-uses-event-aggregator-or-mediator-pattern
     /// </summary>
     public class FirLibMessenger
     {
@@ -25,7 +25,7 @@ namespace FirLib.Core.Patterns.Messaging
         /// </summary>
         public static Func<FirLibMessenger, Exception, bool>? CustomPublishExceptionHandler;
 
-        // Global synchronization (enables the possibility to publish a message over more threads / areas of the application)
+        // Global synchronization (enables the possibility to publish a message over more messengers / areas of the application)
         private static ConcurrentDictionary<string, FirLibMessenger> s_messengersByName;
 
         // Global information about message routing
@@ -33,13 +33,67 @@ namespace FirLib.Core.Patterns.Messaging
         private static ConcurrentDictionary<Type, string[]> s_messageSources;
 
         // Checking and global synchronization
-        private string _messengerName;
-        private SynchronizationContext? _syncContext;
-        private FirLibMessengerThreadingBehavior _checkBehavior;
+        private string _globalMessengerName;
+        private SynchronizationContext? _hostSyncContext;
+        private FirLibMessengerThreadingBehavior _publishCheckBehavior;
 
         // Message subscriptions
         private Dictionary<Type, List<MessageSubscription>> _messageSubscriptions;
         private object _messageSubscriptionsLock;
+
+        /// <summary>
+        /// Gets or sets the synchronization context on which to publish all messages.
+        /// </summary>
+        public SynchronizationContext? HostSyncContext
+        {
+            get { return _hostSyncContext; }
+        }
+
+        /// <summary>
+        /// Gets the current threading behavior of this Messenger.
+        /// </summary>
+        public FirLibMessengerThreadingBehavior ThreadingBehavior
+        {
+            get { return _publishCheckBehavior; }
+        }
+
+        /// <summary>
+        /// Gets the name of the associated thread.
+        /// </summary>
+        public string MainThreadName
+        {
+            get
+            {
+                return _globalMessengerName;
+            }
+        }
+
+        /// <summary>
+        /// Counts all message subscriptions.
+        /// </summary>
+        public int CountSubscriptions
+        {
+            get
+            {
+                lock (_messageSubscriptionsLock)
+                {
+                    var totalCount = 0;
+                    foreach (var actKeyValuePair in _messageSubscriptions)
+                    {
+                        totalCount += actKeyValuePair.Value.Count;
+                    }
+                    return totalCount;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the total count of globally registered messengers.
+        /// </summary>
+        public static int CountGlobalMessengers
+        {
+            get { return s_messengersByName.Count; }
+        }
 
         /// <summary>
         /// Initializes the <see cref="FirLibMessenger" /> class.
@@ -47,7 +101,6 @@ namespace FirLib.Core.Patterns.Messaging
         static FirLibMessenger()
         {
             s_messengersByName = new ConcurrentDictionary<string, FirLibMessenger>();
-
             s_messagesAsyncTargets = new ConcurrentDictionary<Type, string[]>();
             s_messageSources = new ConcurrentDictionary<Type, string[]>();
         }
@@ -57,9 +110,9 @@ namespace FirLib.Core.Patterns.Messaging
         /// </summary>
         public FirLibMessenger()
         {
-            _messengerName = string.Empty;
-            _syncContext = null;
-            _checkBehavior = FirLibMessengerThreadingBehavior.Ignore;
+            _globalMessengerName = string.Empty;
+            _hostSyncContext = null;
+            _publishCheckBehavior = FirLibMessengerThreadingBehavior.Ignore;
 
             _messageSubscriptions = new Dictionary<Type, List<MessageSubscription>>();
             _messageSubscriptionsLock = new object();
@@ -91,34 +144,43 @@ namespace FirLib.Core.Patterns.Messaging
         }
 
         /// <summary>
-        /// Sets all required threading properties based on the given target thread.
-        /// The name of the messenger is directly taken from the given ObjectThread.
+        /// Sets all required properties based on the given target thread.
+        /// The name of the messenger is directly taken from the given <see cref="BackgroundLoop"/>.
         /// </summary>
-        /// <param name="targetThread">The thread on which this Messenger should work on.</param>
-        public void ApplyForGlobalSynchronization(BackgroundLoop targetThread)
+        /// <param name="hostThread">The thread on which this Messenger should work on.</param>
+        public void ConnectToGlobalMessaging(BackgroundLoop hostThread)
         {
-            targetThread.EnsureNotNull(nameof(targetThread));
+            hostThread.EnsureNotNull(nameof(hostThread));
 
-            this.ApplyForGlobalSynchronization(
+            this.ConnectToGlobalMessaging(
                 FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls,
-                targetThread.Name,
-                targetThread.SyncContext);
+                hostThread.Name,
+                hostThread.SyncContext);
         }
 
         /// <summary>
         /// Sets all required synchronization properties.
         /// </summary>
-        /// <param name="checkBehavior">Defines the checking behavior for Publish calls.</param>
+        /// <param name="checkBehavior">Defines the checking behavior for publish calls.</param>
         /// <param name="messengerName">The name by which this messenger should be registered.</param>
-        /// <param name="syncContext">The synchronization context to be used.</param>
-        public void ApplyForGlobalSynchronization(FirLibMessengerThreadingBehavior checkBehavior, string messengerName, SynchronizationContext syncContext)
+        /// <param name="hostSyncContext">The synchronization context to be used.</param>
+        public void ConnectToGlobalMessaging(FirLibMessengerThreadingBehavior checkBehavior, string messengerName, SynchronizationContext hostSyncContext)
         {
             messengerName.EnsureNotNullOrEmpty(nameof(messengerName));
-            syncContext.EnsureNotNull(nameof(syncContext));
+            hostSyncContext.EnsureNotNull(nameof(hostSyncContext));
 
-            _messengerName = messengerName;
-            _checkBehavior = checkBehavior;
-            _syncContext = syncContext;
+            if (!string.IsNullOrEmpty(_globalMessengerName))
+            {
+                throw new FirLibException($"This messenger is already registered as '{_globalMessengerName}'!");
+            }
+            if (s_messengersByName.ContainsKey(messengerName))
+            {
+                throw new FirLibException($"The name '{messengerName}' is already in use by another messenger!");
+            }
+
+            _globalMessengerName = messengerName;
+            _publishCheckBehavior = checkBehavior;
+            _hostSyncContext = hostSyncContext;
 
             if (!string.IsNullOrEmpty(messengerName))
             {
@@ -127,17 +189,17 @@ namespace FirLib.Core.Patterns.Messaging
         }
 
         /// <summary>
-        /// Clears all synchronization options.
+        /// Clears all synchronization configuration.
         /// </summary>
-        public void DiscardGlobalSynchronization()
+        public void DisconnectFromGlobalMessaging()
         {
-            if (string.IsNullOrEmpty(_messengerName)) { return; }
+            if (string.IsNullOrEmpty(_globalMessengerName)) { return; }
 
-            s_messengersByName.TryRemove(_messengerName, out _);
+            s_messengersByName.TryRemove(_globalMessengerName, out _);
 
-            _checkBehavior = FirLibMessengerThreadingBehavior.Ignore;
-            _messengerName = string.Empty;
-            _syncContext = null;
+            _publishCheckBehavior = FirLibMessengerThreadingBehavior.Ignore;
+            _globalMessengerName = string.Empty;
+            _hostSyncContext = null;
         }
 
         /// <summary>
@@ -182,46 +244,6 @@ namespace FirLib.Core.Patterns.Messaging
             return taskComplSource.Task;
         }
 
-        ///// <summary>
-        ///// Subscribes all receiver-methods of the given target object to this Messenger.
-        ///// Subscribe and unsubscribe is automatically called when the control is created/destroyed.
-        ///// </summary>
-        ///// <param name="target">The target win.forms control.</param>
-        //public void SubscribeAllOnControl(System.Windows.Forms.Control target)
-        //{
-        //    target.EnsureNotNull(nameof(target));
-
-        //    IEnumerable<MessageSubscription> generatedSubscriptions = null;
-
-        //    // Create handler delegates
-        //    EventHandler onHandleCreated = (sender, eArgs) =>
-        //    {
-        //        if (generatedSubscriptions == null)
-        //        {
-        //            generatedSubscriptions = SubscribeAll(target);
-        //        }
-        //    };
-        //    EventHandler onHandleDestroyed = (inner, eArgs) =>
-        //    {
-        //        if (generatedSubscriptions != null)
-        //        {
-        //            foreach(MessageSubscription actSubscription in generatedSubscriptions)
-        //            {
-        //                actSubscription.Unsubscribe();
-        //            }
-        //            generatedSubscriptions = null;
-        //        }
-        //    };
-
-        //    // Attach to events and subscribe on message, if handle is already created
-        //    target.HandleCreated += onHandleCreated;
-        //    target.HandleDestroyed += onHandleDestroyed;
-        //    if (target.IsHandleCreated)
-        //    {
-        //        generatedSubscriptions = SubscribeAll(target);
-        //    }
-        //}
-
         /// <summary>
         /// Subscribes all receiver-methods of the given target object to this Messenger.
         /// The messages have to be called <see cref="METHOD_NAME_MESSAGE_RECEIVED"/>.
@@ -232,7 +254,6 @@ namespace FirLib.Core.Patterns.Messaging
             targetObject.EnsureNotNull(nameof(targetObject));
 
             Type targetObjectType = targetObject.GetType();
-
             List<MessageSubscription> generatedSubscriptions = new(16);
             try
             {
@@ -291,7 +312,6 @@ namespace FirLib.Core.Patterns.Messaging
         /// <typeparam name="TMessageType">The type of the message type.</typeparam>
         /// <param name="condition">The condition.</param>
         /// <param name="actionOnMessage">The messenger.</param>
-        /// <returns></returns>
         public MessageSubscription SubscribeWhen<TMessageType>(Func<TMessageType, bool> condition, Action<TMessageType> actionOnMessage)
             where TMessageType : FirLibMessage
         {
@@ -353,7 +373,7 @@ namespace FirLib.Core.Patterns.Messaging
             {
                 Type messageType = messageSubscription.MessageType;
 
-                //Remove subscription from internal list
+                // Remove subscription from internal list
 
                 lock (_messageSubscriptionsLock)
                 {
@@ -368,7 +388,7 @@ namespace FirLib.Core.Patterns.Messaging
                     }
                 }
 
-                //Clear given subscription
+                // Clear given subscription
                 messageSubscription.Clear();
             }
         }
@@ -376,13 +396,13 @@ namespace FirLib.Core.Patterns.Messaging
         /// <summary>
         /// Counts all message subscriptions for the given message type.
         /// </summary>
-        /// <typeparam name="MessageType">The type of the message for which to count all subscriptions.</typeparam>
-        public int CountSubscriptionsForMessage<MessageType>()
-            where MessageType : FirLibMessage
+        /// <typeparam name="TMessageType">The type of the message for which to count all subscriptions.</typeparam>
+        public int CountSubscriptionsForMessage<TMessageType>()
+            where TMessageType : FirLibMessage
         {
             lock (_messageSubscriptionsLock)
             {
-                if (_messageSubscriptions.TryGetValue(typeof(MessageType), out var subscriptions))
+                if (_messageSubscriptions.TryGetValue(typeof(TMessageType), out var subscriptions))
                 {
                     return subscriptions.Count;
                 }
@@ -397,10 +417,10 @@ namespace FirLib.Core.Patterns.Messaging
         /// Sends the given message to all subscribers (async processing).
         /// There is no possibility here to wait for the answer.
         /// </summary>
-        public void BeginPublish<MessageType>()
-            where MessageType : FirLibMessage, new()
+        public void BeginPublish<TMessageType>()
+            where TMessageType : FirLibMessage, new()
         {
-            BeginPublish(new MessageType());
+            this.BeginPublish(new TMessageType());
         }
 
         /// <summary>
@@ -413,7 +433,7 @@ namespace FirLib.Core.Patterns.Messaging
             TMessageType message)
             where TMessageType : FirLibMessage
         {
-            _syncContext.PostAlsoIfNull(() => this.Publish(message));
+            _hostSyncContext.PostAlsoIfNull(() => this.Publish(message));
         }
 
         /// <summary>
@@ -424,7 +444,7 @@ namespace FirLib.Core.Patterns.Messaging
         public Task PublishAsync<TMessageType>()
             where TMessageType : FirLibMessage, new()
         {
-            return _syncContext.PostAlsoIfNullAsync(
+            return _hostSyncContext.PostAlsoIfNullAsync(
                 this.Publish<TMessageType>);
         }
 
@@ -438,7 +458,7 @@ namespace FirLib.Core.Patterns.Messaging
             TMessageType message)
             where TMessageType : FirLibMessage
         {
-            return _syncContext.PostAlsoIfNullAsync(
+            return _hostSyncContext.PostAlsoIfNullAsync(
                 () => this.Publish(message));
         }
 
@@ -479,7 +499,7 @@ namespace FirLib.Core.Patterns.Messaging
             try
             {
                 // Check whether publish is possible
-                if(_checkBehavior == FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls)
+                if(_publishCheckBehavior == FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls)
                 {
                     if (!this.CompareSynchronizationContexts())
                     {
@@ -490,16 +510,14 @@ namespace FirLib.Core.Patterns.Messaging
                     }
                 }
 
-                // Notify all subscribed targets
-                Type currentType = typeof(TMessageType);
-
                 // Check for correct message sources
+                Type currentType = typeof(TMessageType);
                 if (isInitialCall)
                 {
-                    string[] possibleSources = s_messageSources.GetOrAdd(currentType, (_) => message.GetPossibleSourceThreads());
+                    string[] possibleSources = s_messageSources.GetOrAdd(currentType, (_) => message.GetPossibleSourceMessengers());
                     if (possibleSources.Length > 0)
                     {
-                        string mainThreadName = _messengerName;
+                        string mainThreadName = _globalMessengerName;
                         if (string.IsNullOrEmpty(mainThreadName) ||
                             (Array.IndexOf(possibleSources, mainThreadName) < 0))
                         {
@@ -542,8 +560,8 @@ namespace FirLib.Core.Patterns.Messaging
                 if (isInitialCall)
                 {
                     // Get information about message routing
-                    string[] asyncTargets = s_messagesAsyncTargets.GetOrAdd(currentType, (_) => message.GetAsyncRoutingTargetThreads());
-                    string mainThreadName = _messengerName;
+                    string[] asyncTargets = s_messagesAsyncTargets.GetOrAdd(currentType, (_) => message.GetAsyncRoutingTargetMessengers());
+                    string mainThreadName = _globalMessengerName;
                     for (var loop = 0; loop < asyncTargets.Length; loop++)
                     {
                         string actAsyncTargetName = asyncTargets[loop];
@@ -551,7 +569,7 @@ namespace FirLib.Core.Patterns.Messaging
 
                         if (s_messengersByName.TryGetValue(actAsyncTargetName, out var actAsyncTargetHandler))
                         {
-                            var actSyncContext = actAsyncTargetHandler!._syncContext;
+                            var actSyncContext = actAsyncTargetHandler!._hostSyncContext;
                             if (actSyncContext == null) { continue; }
 
                             FirLibMessenger innerHandlerForAsyncCall = actAsyncTargetHandler!;
@@ -600,61 +618,7 @@ namespace FirLib.Core.Patterns.Messaging
         /// </summary>
         private bool CompareSynchronizationContexts()
         {
-            return SynchronizationContext.Current == _syncContext;
-        }
-
-        /// <summary>
-        /// Gets or sets the synchronization context on which to publish all messages.
-        /// </summary>
-        public SynchronizationContext? SyncContext
-        {
-            get { return _syncContext; }
-        }
-
-        /// <summary>
-        /// Gets the current threading behavior of this Messenger.
-        /// </summary>
-        public FirLibMessengerThreadingBehavior ThreadingBehavior
-        {
-            get { return _checkBehavior; }
-        }
-
-        /// <summary>
-        /// Gets the name of the associated thread.
-        /// </summary>
-        public string MainThreadName
-        {
-            get
-            {
-                return _messengerName;
-            }
-        }
-
-        /// <summary>
-        /// Counts all message subscriptions.
-        /// </summary>
-        public int CountSubscriptions
-        {
-            get
-            {
-                lock (_messageSubscriptionsLock)
-                {
-                    int totalCount = 0;
-                    foreach (var actKeyValuePair in _messageSubscriptions)
-                    {
-                        totalCount += actKeyValuePair.Value.Count;
-                    }
-                    return totalCount;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the total count of globally registered messengers.
-        /// </summary>
-        public static int CountGlobalMessengers
-        {
-            get { return s_messengersByName.Count; }
+            return SynchronizationContext.Current == _hostSyncContext;
         }
     }
 }
