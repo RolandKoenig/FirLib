@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Patterns\Messenger\" />
-    <Folder Include="Patterns\BackgroundLoop\" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
