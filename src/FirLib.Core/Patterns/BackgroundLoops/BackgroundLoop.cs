@@ -402,7 +402,7 @@ namespace FirLib.Core.Patterns.BackgroundLoops
             /// </summary>
             /// <param name="d">The <see cref="T:System.Threading.SendOrPostCallback"/> delegate to call.</param>
             /// <param name="state">The object passed to the delegate.</param>
-            public override void Post(SendOrPostCallback d, object state)
+            public override void Post(SendOrPostCallback d, object? state)
             {
                 _owner.InvokeAsync(() => d(state));
             }
@@ -412,7 +412,7 @@ namespace FirLib.Core.Patterns.BackgroundLoops
             /// </summary>
             /// <param name="d">The <see cref="T:System.Threading.SendOrPostCallback"/> delegate to call.</param>
             /// <param name="state">The object passed to the delegate.</param>
-            public override void Send(SendOrPostCallback d, object state)
+            public override void Send(SendOrPostCallback d, object? state)
             {
                 throw new InvalidOperationException($"Synchronous messages not supported on {nameof(BackgroundLoop)}!");
             }
