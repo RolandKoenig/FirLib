@@ -164,10 +164,9 @@ namespace FirLib.Core.Patterns.Messaging
         /// <param name="checkBehavior">Defines the checking behavior for publish calls.</param>
         /// <param name="messengerName">The name by which this messenger should be registered.</param>
         /// <param name="hostSyncContext">The synchronization context to be used.</param>
-        public void ConnectToGlobalMessaging(FirLibMessengerThreadingBehavior checkBehavior, string messengerName, SynchronizationContext hostSyncContext)
+        public void ConnectToGlobalMessaging(FirLibMessengerThreadingBehavior checkBehavior, string messengerName, SynchronizationContext? hostSyncContext)
         {
             messengerName.EnsureNotNullOrEmpty(nameof(messengerName));
-            hostSyncContext.EnsureNotNull(nameof(hostSyncContext));
 
             if (!string.IsNullOrEmpty(_globalMessengerName))
             {
@@ -246,7 +245,7 @@ namespace FirLib.Core.Patterns.Messaging
 
         /// <summary>
         /// Subscribes all receiver-methods of the given target object to this Messenger.
-        /// The messages have to be called <see cref="METHOD_NAME_MESSAGE_RECEIVED"/>.
+        /// The messages have to be called OnMessageReceived.
         /// </summary>
         /// <param name="targetObject">The target object which is to subscribe.</param>
         public IEnumerable<MessageSubscription> SubscribeAll(object targetObject)
@@ -595,7 +594,7 @@ namespace FirLib.Core.Patterns.Messaging
             {
                 // Check whether we have to throw the exception globally
                 var globalExceptionHandler = FirLibMessenger.CustomPublishExceptionHandler;
-                bool doRaise = true;
+                var doRaise = true;
                 if (globalExceptionHandler != null)
                 {
                     try

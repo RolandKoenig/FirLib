@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FirLib.Core.Patterns.Messaging;
 
 namespace FirLib.Core.Patterns.Mvvm
 {
