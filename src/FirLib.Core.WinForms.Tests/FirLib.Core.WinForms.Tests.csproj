@@ -4,9 +4,7 @@
     <TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
     <UseWindowsForms>true</UseWindowsForms>
     <IsPackable>false</IsPackable>
-    <Nullable>enable</Nullable>
-    <LangVersion>9.0</LangVersion>
-    <RootNamespace>FirLib.Core.Tests</RootNamespace>
+	  <RootNamespace>FirLib.Core.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

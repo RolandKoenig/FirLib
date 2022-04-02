@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
-    <!-- Common metadata -->
+
+	  <!-- Common metadata -->
 	  <Authors>Roland König</Authors>
     <Company>Roland König</Company>
     <Description>Utility library for most of my own open source applications</Description>
@@ -12,6 +13,10 @@
     <Version>0.1.0</Version>
     <PackageVersion>0.1.0</PackageVersion>
     <Product>FirLib</Product>
+
+    <!-- Common project settings -->
+	  <Nullable>enable</Nullable>
+	  <LangVersion>10.0</LangVersion>
 
     <!-- Nuget properties -->
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -29,12 +34,7 @@
 	  <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
-	<!-- Enable CI build -->
-	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-	</PropertyGroup> 
-
-  <ItemGroup>
+	<ItemGroup>
 	  <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -44,4 +44,5 @@
 	<ItemGroup>
 		<None Include="../../LICENSE.md" Link="LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
 	</ItemGroup>
+
 </Project>
