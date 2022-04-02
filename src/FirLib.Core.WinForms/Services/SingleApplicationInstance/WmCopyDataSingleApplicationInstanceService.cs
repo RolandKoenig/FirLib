@@ -37,7 +37,7 @@ namespace FirLib.Core.Services.SingleApplicationInstance
 
                 _ctrlCopyData = new();
                 _ctrlCopyData.CreateHandle(createParams);
-                _ctrlCopyData.MessageReceived += OnCtrlCopyData_MessageReceived;
+                _ctrlCopyData.MessageReceived += this.OnCtrlCopyData_MessageReceived;
             }
             else
             {
@@ -45,7 +45,7 @@ namespace FirLib.Core.Services.SingleApplicationInstance
             }
         }
 
-        private void OnCtrlCopyData_MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void OnCtrlCopyData_MessageReceived(object? sender, MessageReceivedEventArgs e)
         {
             this.MessageReceived?.Invoke(this, e);
         }

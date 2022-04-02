@@ -28,6 +28,8 @@ namespace FirLib.Tests.Core.Patterns.ErrorAnalysis
             var infos = exAnalyzer.ReadExceptionInfo(catchedException);
             var innerExceptions = exAnalyzer.GetInnerExceptions(catchedException);
 
+            Assert.IsNotNull(infos);
+
             var infoDict = TestUtilities.ToDictionary(infos);
             Assert.AreEqual(0, innerExceptions?.Count() ?? 0, "Inner exceptions");
             Assert.AreEqual("System.ApplicationException", infoDict["Type"], "Type");

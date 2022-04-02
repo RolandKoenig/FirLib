@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
-    <Authors>Roland König</Authors>
+    <!-- Common metadata -->
+	  <Authors>Roland König</Authors>
     <Company>Roland König</Company>
     <Description>Utility library for most of my own open source applications</Description>
     <Copyright>©2022 by Roland König</Copyright>
@@ -11,6 +12,29 @@
     <Version>0.1.0</Version>
     <PackageVersion>0.1.0</PackageVersion>
     <Product>FirLib</Product>
+
+    <!-- Nuget properties -->
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+	  <Deterministic>true</Deterministic>
+    <IncludeSymbols>true</IncludeSymbols>
+	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Treat warnings as errors -->
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	  <WarningsAsErrors></WarningsAsErrors>
+	  <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
+
+	<!-- Enable CI build -->
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup> 
+
+	<ItemGroup>
+		<None Include="../../LICENSE.md" Link="LICENSE.md" Pack="true" PackagePath="LICENSE.md" />
+	</ItemGroup>
 </Project>
