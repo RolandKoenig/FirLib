@@ -20,10 +20,13 @@ jobs:
         dotnet-version: 5.0.x
         
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./src/FirLib.sln
       
     - name: Build
-      run: dotnet build src/FirLib.sln --no-restore
+      run: dotnet build -c Release ./src/FirLib.sln --no-restore
       
     - name: Test
-      run: dotnet test src/FirLib.sln --no-build --verbosity normal
+      run: dotnet test -c Release ./src/FirLib.sln --no-build --verbosity normal
+  
+    - name: Pack
+      run: dotnet pack -c Release -o ./publish ./src/FirLib.sln /p:ContinuousIntegrationBuild=true
