@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31025.194
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Core", "FirLib.Core\FirLib.Core.csproj", "{E2BB897B-5C45-4136-9EB0-926FE525CAB6}"
 EndProject
@@ -27,9 +27,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Core.WinForms.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Formats.Gpx.Tests", "FirLib.Formats.Gpx.Tests\FirLib.Formats.Gpx.Tests.csproj", "{46794B09-C2B4-497A-9574-022C43E2799D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Core.Avalonia", "FirLib.Core.Avalonia\FirLib.Core.Avalonia.csproj", "{9B7479B0-D507-4F1D-A500-267940AF84F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Core.Avalonia", "FirLib.Core.Avalonia\FirLib.Core.Avalonia.csproj", "{9B7479B0-D507-4F1D-A500-267940AF84F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Core.Avalonia.Tests", "FirLib.Core.Avalonia.Tests\FirLib.Core.Avalonia.Tests.csproj", "{DF7FDB06-09B4-45E4-A570-C99672FE2D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Core.Avalonia.Tests", "FirLib.Core.Avalonia.Tests\FirLib.Core.Avalonia.Tests.csproj", "{DF7FDB06-09B4-45E4-A570-C99672FE2D8F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4D4BB4A3-F4CE-459C-A152-1809F4C6F44E}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Avalonia.CommonControls", "FirLib.Avalonia.CommonControls\FirLib.Avalonia.CommonControls.csproj", "{5CE7EA02-A353-4B30-AE77-8626C381528F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,9 +89,16 @@ Global
 		{DF7FDB06-09B4-45E4-A570-C99672FE2D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF7FDB06-09B4-45E4-A570-C99672FE2D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF7FDB06-09B4-45E4-A570-C99672FE2D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CE7EA02-A353-4B30-AE77-8626C381528F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CE7EA02-A353-4B30-AE77-8626C381528F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CE7EA02-A353-4B30-AE77-8626C381528F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CE7EA02-A353-4B30-AE77-8626C381528F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4D4BB4A3-F4CE-459C-A152-1809F4C6F44E} = {7CAD234E-029D-4D10-BDE4-3A3F7C864D1D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09E3A6D8-B5AD-4FAF-8C45-F5A664246856}

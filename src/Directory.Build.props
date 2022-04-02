@@ -1,0 +1,16 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Roland König</Authors>
+    <Company>Roland König</Company>
+    <Description>Utility library for most of my own open source applications</Description>
+    <Copyright>©2022 by Roland König</Copyright>
+    <PackageProjectUrl>https://github.com/RolandKoenig/FirLib</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RolandKoenig/FirLib.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>0.1.0</Version>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Product>FirLib</Product>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+</Project>
