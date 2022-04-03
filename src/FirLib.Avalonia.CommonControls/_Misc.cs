@@ -2,6 +2,8 @@
 
 public enum MainWindowFrameStatus
 {
+    Hidden,
+
     NeutralGray,
 
     NeutralBlue,

@@ -13,7 +13,7 @@ public class MainWindowFrame : UserControl
 {
     public static readonly StyledProperty<MainWindowFrameStatus> StatusProperty =
         AvaloniaProperty.Register<MainWindowFrame, MainWindowFrameStatus>(
-            nameof(Status), MainWindowFrameStatus.NeutralBlue,
+            nameof(Status), MainWindowFrameStatus.Hidden,
             notifying: OnStatusChanged);
 
     private Window? _mainWindow;
@@ -138,23 +138,32 @@ public class MainWindowFrame : UserControl
 
         switch (this.Status)
         {
+            case MainWindowFrameStatus.Hidden:
+                _ctrlStatusBar.IsVisible = false;
+                break;
+
             case MainWindowFrameStatus.NeutralBlue:
+                _ctrlStatusBar.IsVisible = true;
                 _ctrlStatusBar.Background = Brush.Parse("#0975C6");
                 break;
 
             case MainWindowFrameStatus.NeutralGray:
+                _ctrlStatusBar.IsVisible = true;
                 _ctrlStatusBar.Background = Brushes.Gray;
                 break;
 
             case MainWindowFrameStatus.Green:
+                _ctrlStatusBar.IsVisible = true;
                 _ctrlStatusBar.Background = Brushes.Green;
                 break;
 
             case MainWindowFrameStatus.Yellow:
+                _ctrlStatusBar.IsVisible = true;
                 _ctrlStatusBar.Background = Brushes.Yellow;
                 break;
 
             case MainWindowFrameStatus.Red:
+                _ctrlStatusBar.IsVisible = true;
                 _ctrlStatusBar.Background = Brushes.Red;
                 break;
 

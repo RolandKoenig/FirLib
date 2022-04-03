@@ -24,6 +24,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <!-- Header row (normally a menu) -->
@@ -42,6 +43,13 @@
             <Panel Grid.Row="2" x:Name="CtrlFooterArea">
 
             </Panel>
+
+            <!-- Colored status bar -->
+            <Panel x:Name="CtrlStatusBar" 
+                   Grid.Row="3"
+                   Height="7"
+                   IsHitTestVisible="False"
+                   Background="#0975C6"/>
         </Grid>
 
         <local:DialogHostControl Grid.Row="1" 

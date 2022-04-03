@@ -1,0 +1,32 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:firlibcommon="clr-namespace:FirLib.Avalonia.CommonControls;assembly=FirLib.Avalonia.CommonControls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="FirLib.Core.Avalonia.TestApp.MainWindow"
+        ExtendClientAreaToDecorationsHint="True">
+    <firlibcommon:MainWindowFrame>
+        <firlibcommon:MainWindowFrame.CustomTitleArea>
+            <TextBlock Text="Avalonia TestApp" />
+        </firlibcommon:MainWindowFrame.CustomTitleArea>
+
+        <firlibcommon:MainWindowFrame.HeaderArea>
+            <Menu>
+                <MenuItem Header="File" />
+                <MenuItem Header="Help" />
+            </Menu>
+        </firlibcommon:MainWindowFrame.HeaderArea>
+
+        <firlibcommon:MainWindowFrame.MainContentArea>
+            <DockPanel LastChildFill="True">
+                <Menu DockPanel.Dock="Top">
+
+                </Menu>
+                <Grid>
+
+                </Grid>
+            </DockPanel>
+        </firlibcommon:MainWindowFrame.MainContentArea>
+    </firlibcommon:MainWindowFrame>
+</Window>
