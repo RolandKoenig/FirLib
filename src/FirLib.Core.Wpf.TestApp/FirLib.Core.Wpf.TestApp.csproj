@@ -4,6 +4,7 @@
     <TargetFrameworks>net48;net6.0-windows</TargetFrameworks>
     <OutputType>WinExe</OutputType>
     <UseWPF>true</UseWPF>
+	  <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

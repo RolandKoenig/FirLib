@@ -10,8 +10,8 @@
     <RepositoryUrl>https://github.com/RolandKoenig/FirLib.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>0.1.0</Version>
-    <PackageVersion>0.1.0</PackageVersion>
+    <Version>0.1.1</Version>
+    <PackageVersion>0.1.1</PackageVersion>
     <Product>FirLib</Product>
 
     <!-- Common project settings -->
