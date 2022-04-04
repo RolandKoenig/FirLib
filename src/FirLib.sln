@@ -39,7 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4D4BB4A3-F4C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Avalonia.CommonControls", "FirLib.Avalonia.CommonControls\FirLib.Avalonia.CommonControls.csproj", "{5CE7EA02-A353-4B30-AE77-8626C381528F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Core.Avalonia.TestApp", "FirLib.Core.Avalonia.TestApp\FirLib.Core.Avalonia.TestApp.csproj", "{B17D5B58-BAA3-4736-B857-417E07BF295F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Core.Avalonia.TestApp", "FirLib.Core.Avalonia.TestApp\FirLib.Core.Avalonia.TestApp.csproj", "{B17D5B58-BAA3-4736-B857-417E07BF295F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{16C8C819-87BC-4995-95A2-FCB3F4521D9C}"
 EndProject
@@ -48,6 +48,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{4D715882-7240-4E7F-B9A4-8103565934E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinForms", "WinForms", "{47F4C49F-FDD0-4B92-8C93-BB7D9056C8EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Avalonia.PropertyGridControl", "FirLib.Avalonia.PropertyGridControl\FirLib.Avalonia.PropertyGridControl.csproj", "{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +109,10 @@ Global
 		{B17D5B58-BAA3-4736-B857-417E07BF295F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B17D5B58-BAA3-4736-B857-417E07BF295F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B17D5B58-BAA3-4736-B857-417E07BF295F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
