@@ -1,41 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace FirLib.Avalonia.PropertyGridControl;
 
-namespace FirLib.Avalonia.PropertyGridControl
+public enum PropertyValueType
 {
-    public enum PropertyValueType
-    {
-        Unsupported,
+    Unsupported,
 
-        Bool,
+    Bool,
 
-        String,
+    String,
 
-        Enum,
+    Enum
+}
 
-        EncodingWebName,
+public interface IPropertyContractResolver
+{
+    T? GetDataAnnotation<T>(Type targetType, string propertyName)
+        where T : Attribute;
 
-        TextAndHexadecimalEdit,
-         
-        DetailSettings,
-
-        FixedPossibleValues
-    }
-
-    public interface IPropertyContractResolver
-    {
-        T? GetDataAnnotation<T>(Type targetType, string propertyName)
-            where T : Attribute;
-
-        IEnumerable<Attribute> GetDataAnnotations(Type targetType, string propertyName);
-    }
-
-    public class DetailSettingsAttribute : Attribute
-    {
-        public DetailSettingsAttribute()
-        {
-
-        }
-    }
+    IEnumerable<Attribute> GetDataAnnotations(Type targetType, string propertyName);
 }

@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 
-namespace FirLib.Avalonia.PropertyGridControl;
+namespace FirLib.Avalonia.PropertyGridControl.Mvvm;
 
-public class ValidatableViewModelBase : ViewModelBase, INotifyDataErrorInfo
+public class ValidatableViewModelBase : PropertyChangedBase, INotifyDataErrorInfo
 {
     private static readonly string[] NO_ERRORS = Array.Empty<string>();
 

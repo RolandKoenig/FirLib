@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace FirLib.Avalonia.PropertyGridControl;
+namespace FirLib.Avalonia.PropertyGridControl.Mvvm;
 
 public class PropertyChangedBase : INotifyPropertyChanged
 {
