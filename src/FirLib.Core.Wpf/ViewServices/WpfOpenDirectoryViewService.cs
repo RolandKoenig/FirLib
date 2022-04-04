@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using FirLib.Core.Patterns.Mvvm;
 
 namespace FirLib.Core.ViewServices;
@@ -20,10 +21,10 @@ public class WpfOpenDirectoryViewService : ViewServiceBase, IOpenDirectoryViewSe
     /// <inheritdoc />
     public Task<string?> ShowOpenDirectoryDialogAsync(string title)
     {
-        using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+        using (var dialog = new FolderBrowserDialog())
         {
             dialog.Description = title;
-            if(dialog.ShowDialog(_owner.GetIWin32Window()) == System.Windows.Forms.DialogResult.OK)
+            if(dialog.ShowDialog(_owner.GetIWin32Window()) == DialogResult.OK)
             {
                 return Task.FromResult<string?>(dialog.SelectedPath);
             }

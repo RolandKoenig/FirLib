@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using FirLib.Core.Checking;
+using System.Collections.Generic;
 
 namespace FirLib.Core.Patterns.ErrorAnalysis;
 

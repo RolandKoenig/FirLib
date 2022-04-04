@@ -124,7 +124,7 @@ public class DialogHostControl : Grid
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == Grid.BoundsProperty)
+        if (change.Property == BoundsProperty)
         {
             this.UpdateBorderSize();
         }

@@ -1,9 +1,9 @@
 ﻿using System;
+using FirLib.Core.Patterns.PropertiesContainer;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FirLib.Core.Patterns.PropertiesContainer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FirLib.Tests.Core.Patterns.PropertiesContainer;

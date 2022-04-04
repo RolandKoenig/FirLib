@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using FirLib.Core.Checking;
+using System.Threading.Tasks;
 using FirLib.Core.Utils.IO.AssemblyResources;
 
 namespace FirLib.Core.Utils.IO.ResourceLinks;

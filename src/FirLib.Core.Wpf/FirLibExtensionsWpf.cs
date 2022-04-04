@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Threading;
 using FirLib.Core.Dialogs;
 using FirLib.Core.Infrastructure;
 using FirLib.Core.Patterns.ErrorAnalysis;
 using FirLib.Core.Patterns.Messaging;
+using Application = System.Windows.Application;
+using IWin32Window = System.Windows.Forms.IWin32Window;
 
 namespace FirLib.Core;
 
@@ -62,10 +66,10 @@ public static partial class FirLibExtensionsWpf
         e.Handled = true;
     }
 
-    public static System.Windows.Forms.IWin32Window GetIWin32Window(this System.Windows.Media.Visual visual)
+    public static IWin32Window GetIWin32Window(this Visual visual)
     {
-        var source = (System.Windows.Interop.HwndSource)PresentationSource.FromVisual(visual)!;
-        System.Windows.Forms.IWin32Window win = new Win32WindowHandleWrapper(source.Handle);
+        var source = (HwndSource)PresentationSource.FromVisual(visual)!;
+        IWin32Window win = new Win32WindowHandleWrapper(source.Handle);
         return win;
     }
 }

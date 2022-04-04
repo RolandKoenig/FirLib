@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace FirLib.Core;
 
-internal class Win32WindowHandleWrapper : System.Windows.Forms.IWin32Window
+internal class Win32WindowHandleWrapper : IWin32Window
 {
-    private readonly System.IntPtr _handle;
+    private readonly IntPtr _handle;
 
-    public Win32WindowHandleWrapper(System.IntPtr handle)
+    public Win32WindowHandleWrapper(IntPtr handle)
     {
         _handle = handle;
     }
 
-    System.IntPtr System.Windows.Forms.IWin32Window.Handle
+    IntPtr IWin32Window.Handle
     {
         get { return _handle; }
     }

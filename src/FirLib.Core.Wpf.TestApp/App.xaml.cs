@@ -1,12 +1,10 @@
 ﻿using System;
+using FirLib.Core;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using FirLib.Core.Infrastructure;
-using FirLib.Core;
 
 namespace FirLib.Tests.Wpf;
 

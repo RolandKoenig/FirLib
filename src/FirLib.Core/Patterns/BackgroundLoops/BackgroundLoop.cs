@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using FirLib.Core.Checking;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using FirLib.Core.Checking;
 
 namespace FirLib.Core.Patterns.BackgroundLoops;
 
