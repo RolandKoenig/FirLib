@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.13" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="0.10.13" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.13" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.13" />
@@ -27,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FirLib.Avalonia.CommonControls\FirLib.Avalonia.CommonControls.csproj" />
+    <ProjectReference Include="..\FirLib.Avalonia.PropertyGridControl\FirLib.Avalonia.PropertyGridControl.csproj" />
     <ProjectReference Include="..\FirLib.Core.Avalonia\FirLib.Core.Avalonia.csproj" />
   </ItemGroup>
 </Project>
