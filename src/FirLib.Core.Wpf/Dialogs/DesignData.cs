@@ -6,30 +6,29 @@ using System.Text;
 using System.Threading.Tasks;
 using FirLib.Core.Patterns.ErrorAnalysis;
 
-namespace FirLib.Core.Dialogs
+namespace FirLib.Core.Dialogs;
+
+internal static class DesignData
 {
-    internal static class DesignData
+    public static ErrorDialogViewModel? ExceptionInfo
     {
-        public static ErrorDialogViewModel? ExceptionInfo
+        get
         {
-            get
+            try
             {
-                try
-                {
-                    ThrowExceptionInternal();
-                }
-                catch (Exception e)
-                {
-                    return new ErrorDialogViewModel(new ExceptionInfo(e));
-                }
-
-                return null;
+                ThrowExceptionInternal();
             }
-        }
+            catch (Exception e)
+            {
+                return new ErrorDialogViewModel(new ExceptionInfo(e));
+            }
 
-        private static void ThrowExceptionInternal()
-        {
-            throw new ApplicationException("Dummy Exception");
+            return null;
         }
+    }
+
+    private static void ThrowExceptionInternal()
+    {
+        throw new ApplicationException("Dummy Exception");
     }
 }

@@ -13,13 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FirLib.Core.Wpf.Controls.CustomWindow
+namespace FirLib.Core.Wpf.Controls.CustomWindow;
+
+public class CustomWindowTitleIcon : Control
 {
-    public class CustomWindowTitleIcon : Control
+    static CustomWindowTitleIcon()
     {
-        static CustomWindowTitleIcon()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomWindowTitleIcon), new FrameworkPropertyMetadata(typeof(CustomWindowTitleIcon)));
-        }
+        DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomWindowTitleIcon), new FrameworkPropertyMetadata(typeof(CustomWindowTitleIcon)));
     }
 }

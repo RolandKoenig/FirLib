@@ -11,62 +11,61 @@ using FirLib.Core.Infrastructure;
 using FirLib.Core.Patterns.ErrorAnalysis;
 using FirLib.Core.Patterns.Messaging;
 
-namespace FirLib.Core
+namespace FirLib.Core;
+
+public static partial class FirLibExtensionsWpf
 {
-    public static partial class FirLibExtensionsWpf
+    public static FirLibApplicationLoader AttachToWpfEnvironment(this FirLibApplicationLoader loader)
     {
-        public static FirLibApplicationLoader AttachToWpfEnvironment(this FirLibApplicationLoader loader)
+        var uiMessenger = new FirLibMessenger();
+
+        loader.AddLoadAction(() =>
         {
-            var uiMessenger = new FirLibMessenger();
+            Application.Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
 
-            loader.AddLoadAction(() =>
-            {
-                Application.Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
-
-                uiMessenger.CustomSynchronizationContextEqualityChecker = CheckForEqualSynchronizationContexts;
-                uiMessenger.ConnectToGlobalMessaging(
-                    FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls,
-                    FirLibConstants.MESSENGER_NAME_GUI,
-                    SynchronizationContext.Current);
-            });
-            loader.AddUnloadAction(() =>
-            {
-                Application.Current.DispatcherUnhandledException -= CurrentOnDispatcherUnhandledException;
-                uiMessenger.DisconnectFromGlobalMessaging();
-            });
+            uiMessenger.CustomSynchronizationContextEqualityChecker = CheckForEqualSynchronizationContexts;
+            uiMessenger.ConnectToGlobalMessaging(
+                FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls,
+                FirLibConstants.MESSENGER_NAME_GUI,
+                SynchronizationContext.Current);
+        });
+        loader.AddUnloadAction(() =>
+        {
+            Application.Current.DispatcherUnhandledException -= CurrentOnDispatcherUnhandledException;
+            uiMessenger.DisconnectFromGlobalMessaging();
+        });
             
-            return loader;
-        }
+        return loader;
+    }
 
-        private static bool CheckForEqualSynchronizationContexts(SynchronizationContext givenLeft, SynchronizationContext givenRight)
-        {
-            if (!(givenLeft is DispatcherSynchronizationContext left)) { return false; }
-            if (!(givenRight is DispatcherSynchronizationContext right)) { return false; }
+    private static bool CheckForEqualSynchronizationContexts(SynchronizationContext givenLeft, SynchronizationContext givenRight)
+    {
+        if (!(givenLeft is DispatcherSynchronizationContext left)) { return false; }
+        if (!(givenRight is DispatcherSynchronizationContext right)) { return false; }
 
-            var leftDispatcher = FirLibTools.ReadPrivateMember<Dispatcher, DispatcherSynchronizationContext>(left, "_dispatcher");
-            var rightDispatcher = FirLibTools.ReadPrivateMember<Dispatcher, DispatcherSynchronizationContext>(right, "_dispatcher");
+        var leftDispatcher = FirLibTools.ReadPrivateMember<Dispatcher, DispatcherSynchronizationContext>(left, "_dispatcher");
+        var rightDispatcher = FirLibTools.ReadPrivateMember<Dispatcher, DispatcherSynchronizationContext>(right, "_dispatcher");
 
-            return leftDispatcher == rightDispatcher;
-        }
+        return leftDispatcher == rightDispatcher;
+    }
 
-        private static void CurrentOnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            var exceptionInfo = new ExceptionInfo(e.Exception);
+    private static void CurrentOnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        var exceptionInfo = new ExceptionInfo(e.Exception);
 
-            var dlgError = new ErrorDialog();
-            dlgError.DataContext = new ErrorDialogViewModel(exceptionInfo);
-            dlgError.Owner = Application.Current.MainWindow;
+        var dlgError = new ErrorDialog();
+        dlgError.DataContext = new ErrorDialogViewModel(exceptionInfo);
+        dlgError.Owner = Application.Current.MainWindow;
 
-            dlgError.ShowDialog();
+        dlgError.ShowDialog();
 
-            e.Handled = true;
-        }
+        e.Handled = true;
+    }
 
-        public static System.Windows.Forms.IWin32Window GetIWin32Window(this System.Windows.Media.Visual visual)
-        {
-            var source = (System.Windows.Interop.HwndSource)PresentationSource.FromVisual(visual)!;
-            System.Windows.Forms.IWin32Window win = new Win32WindowHandleWrapper(source.Handle);
-            return win;
-        }
+    public static System.Windows.Forms.IWin32Window GetIWin32Window(this System.Windows.Media.Visual visual)
+    {
+        var source = (System.Windows.Interop.HwndSource)PresentationSource.FromVisual(visual)!;
+        System.Windows.Forms.IWin32Window win = new Win32WindowHandleWrapper(source.Handle);
+        return win;
     }
 }

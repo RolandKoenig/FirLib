@@ -8,22 +8,21 @@ using System.Windows;
 using FirLib.Core.Infrastructure;
 using FirLib.Core;
 
-namespace FirLib.Tests.Wpf
-{
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-        /// <inheritdoc />
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
+namespace FirLib.Tests.Wpf;
 
-            // Initialize base application logic
-            FirLibApplication.GetLoader()
-                .AttachToWpfEnvironment()
-                .Load();
-        }
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
+{
+    /// <inheritdoc />
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        // Initialize base application logic
+        FirLibApplication.GetLoader()
+            .AttachToWpfEnvironment()
+            .Load();
     }
 }

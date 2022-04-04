@@ -6,79 +6,78 @@ using System.Threading;
 using FirLib.Core.Infrastructure.Services;
 using FirLib.Core.Patterns;
 
-namespace FirLib.Core.Infrastructure
+namespace FirLib.Core.Infrastructure;
+
+public class FirLibApplicationLoader
 {
-    public class FirLibApplicationLoader
+    private FirLibApplicationContext _context;
+
+    public FirLibServiceContainer Services => _context.Services;
+
+    internal FirLibApplicationLoader()
     {
-        private FirLibApplicationContext _context;
+        _context = new FirLibApplicationContext();
+    }
 
-        public FirLibServiceContainer Services => _context.Services;
+    internal FirLibApplicationContext GetContext() => _context;
 
-        internal FirLibApplicationLoader()
+    public FirLibApplicationLoader AddLoadAction(Action action)
+    {
+        _context.LoadActions ??= new List<Action>();
+        _context.LoadActions.Add(action);
+
+        return this;
+    }
+
+    public FirLibApplicationLoader AddUnloadAction(Action action)
+    {
+        _context.UnloadActions ??= new List<Action>();
+        _context.UnloadActions.Add(action);
+
+        return this;
+    }
+
+    public FirLibApplicationLoader AddService(Type serviceType, object serviceSingleton)
+    {
+        this.Services.Register(
+            serviceType, serviceSingleton);
+        return this;
+    }
+
+    public FirLibApplicationLoader ConfigureCurrentThreadAsMainGuiThread()
+    {
+        this.AddLoadAction(() => Thread.CurrentThread.Name = FirLibConstants.MESSENGER_NAME_GUI);
+        return this;
+    }
+
+    public FirLibApplicationLoader SetProductInfoFromAssembly(Assembly assembly)
+    {
+        var productNameAttrib = assembly.GetCustomAttribute<AssemblyProductAttribute>();
+        if (productNameAttrib != null)
         {
-            _context = new FirLibApplicationContext();
+            _context.ProductName = productNameAttrib.Product;
         }
 
-        internal FirLibApplicationContext GetContext() => _context;
-
-        public FirLibApplicationLoader AddLoadAction(Action action)
+        var versionAttrib = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
+        if (versionAttrib != null)
         {
-            _context.LoadActions ??= new List<Action>();
-            _context.LoadActions.Add(action);
-
-            return this;
+            _context.ProductVersion = versionAttrib.Version;
         }
-
-        public FirLibApplicationLoader AddUnloadAction(Action action)
-        {
-            _context.UnloadActions ??= new List<Action>();
-            _context.UnloadActions.Add(action);
-
-            return this;
-        }
-
-        public FirLibApplicationLoader AddService(Type serviceType, object serviceSingleton)
-        {
-            this.Services.Register(
-                serviceType, serviceSingleton);
-            return this;
-        }
-
-        public FirLibApplicationLoader ConfigureCurrentThreadAsMainGuiThread()
-        {
-            this.AddLoadAction(() => Thread.CurrentThread.Name = FirLibConstants.MESSENGER_NAME_GUI);
-            return this;
-        }
-
-        public FirLibApplicationLoader SetProductInfoFromAssembly(Assembly assembly)
-        {
-            var productNameAttrib = assembly.GetCustomAttribute<AssemblyProductAttribute>();
-            if (productNameAttrib != null)
-            {
-                _context.ProductName = productNameAttrib.Product;
-            }
-
-            var versionAttrib = assembly.GetCustomAttribute<AssemblyVersionAttribute>();
-            if (versionAttrib != null)
-            {
-                _context.ProductVersion = versionAttrib.Version;
-            }
             
-            var versionInfoAttrib = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-            if (versionInfoAttrib != null)
-            {
-                _context.ProductVersion = versionInfoAttrib.InformationalVersion;
-            }
-
-            return this;
-        }
-
-        public IDisposable Load()
+        var versionInfoAttrib = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+        if (versionInfoAttrib != null)
         {
-            FirLibApplication.Load(this);
-
-            return new DummyDisposable(
-                () => FirLibApplication.Unload(this));
+            _context.ProductVersion = versionInfoAttrib.InformationalVersion;
         }
+
+        return this;
+    }
+
+    public IDisposable Load()
+    {
+        FirLibApplication.Load(this);
+
+        return new DummyDisposable(
+            () => FirLibApplication.Unload(this));
     }
 }
