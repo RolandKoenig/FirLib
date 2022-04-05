@@ -7,7 +7,7 @@ namespace FirLib.Avalonia.PropertyGridControl;
 
 internal class PropertyGridViewModel : PropertyChangedBase
 {
-    private List<ConfigurablePropertyMetadata> _propertyMetadata;
+    private List<ConfigurablePropertyRuntime> _propertyMetadata;
     private object? _selectedObject;
     private IPropertyContractResolver? _propertyContractResolver;
 
@@ -26,7 +26,7 @@ internal class PropertyGridViewModel : PropertyChangedBase
         }
     }
 
-    public List<ConfigurablePropertyMetadata> PropertyMetadata
+    public List<ConfigurablePropertyRuntime> PropertyMetadata
     {
         get => _propertyMetadata;
         private set
@@ -41,7 +41,7 @@ internal class PropertyGridViewModel : PropertyChangedBase
 
     public PropertyGridViewModel()
     {
-        _propertyMetadata = new List<ConfigurablePropertyMetadata>(0);
+        _propertyMetadata = new List<ConfigurablePropertyRuntime>(0);
     }
 
     public void SetPropertyContractResolver(IPropertyContractResolver? dataAnnotator)
@@ -51,7 +51,7 @@ internal class PropertyGridViewModel : PropertyChangedBase
 
     private void UpdatePropertyCollection()
     {
-        var newPropertyMetadata = new List<ConfigurablePropertyMetadata>();
+        var newPropertyMetadata = new List<ConfigurablePropertyRuntime>();
 
         var selectedObject = this.SelectedObject;
         if (selectedObject == null)
@@ -78,8 +78,8 @@ internal class PropertyGridViewModel : PropertyChangedBase
             if (actProperty == null){ continue; }
             if (!actProperty.IsBrowsable){ continue; }
 
-            var propMetadata = new ConfigurablePropertyMetadata(actProperty, selectedObject, _propertyContractResolver);
-            if(propMetadata.ValueType == PropertyValueType.Unsupported){ continue; }
+            var propMetadata = new ConfigurablePropertyRuntime(actProperty, selectedObject, _propertyContractResolver);
+            if(propMetadata.Metadata.ValueType == PropertyValueType.Unsupported){ continue; }
 
             newPropertyMetadata.Add(propMetadata);
         }

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace FirLib.Avalonia.PropertyGridControl.Mvvm;
 
-public class PropertyChangedBase : INotifyPropertyChanged
+internal class PropertyChangedBase : INotifyPropertyChanged
 {
     private List<WeakPropertyChangedTarget>? _weakChangeTargets;
 

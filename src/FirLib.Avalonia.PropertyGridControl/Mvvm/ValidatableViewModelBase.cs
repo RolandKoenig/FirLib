@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace FirLib.Avalonia.PropertyGridControl.Mvvm;
 
-public class ValidatableViewModelBase : PropertyChangedBase, INotifyDataErrorInfo
+internal class ValidatableViewModelBase : PropertyChangedBase, INotifyDataErrorInfo
 {
     private static readonly string[] NO_ERRORS = Array.Empty<string>();
 

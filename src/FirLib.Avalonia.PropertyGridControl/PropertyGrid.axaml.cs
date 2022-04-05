@@ -79,9 +79,10 @@ public class PropertyGrid : UserControl
         _gridMain.Children.Clear();
         _gridMain.RowDefinitions.Clear();
 
-        var lstProperties = new List<ConfigurablePropertyMetadata>(_propertyGridVM.PropertyMetadata);
+        var lstProperties = new List<ConfigurablePropertyRuntime>(_propertyGridVM.PropertyMetadata);
         lstProperties.Sort((left, right) =>
-            string.Compare(left.CategoryName, right.CategoryName, StringComparison.Ordinal));
+            string.Compare(left.Metadata.CategoryName, right.Metadata.CategoryName, StringComparison.Ordinal));
+        var allPropertiesMetadata = lstProperties.Select(x => x.Metadata);
 
         // Create all controls
         var actRowIndex = 0;
@@ -92,11 +93,11 @@ public class PropertyGrid : UserControl
         foreach (var actProperty in _propertyGridVM.PropertyMetadata)
         {
             // Create category rows
-            if (actProperty.CategoryName != actCategory)
+            if (actProperty.Metadata.CategoryName != actCategory)
             {
                 _gridMain.RowDefinitions.Add(new RowDefinition {Height = new GridLength(35)});
 
-                actCategory = actProperty.CategoryName;
+                actCategory = actProperty.Metadata.CategoryName;
 
                 var txtHeader = new TextBlock
                 {
@@ -130,9 +131,9 @@ public class PropertyGrid : UserControl
             // Create row header
             var ctrlTextContainer = new Border();
             var ctrlText = new TextBlock();
-            ctrlText.Text = actProperty.PropertyDisplayName;
+            ctrlText.Text = actProperty.Metadata.PropertyDisplayName;
             ctrlText.VerticalAlignment = VerticalAlignment.Center;
-            SetToolTip(ctrlText, actProperty.Description);
+            SetToolTip(ctrlText, actProperty.Metadata.Description);
             ctrlTextContainer.Height = 35.0;
             ctrlTextContainer.Child = ctrlText;
             ctrlTextContainer.SetValue(Grid.RowProperty, actRowIndex);
@@ -141,7 +142,7 @@ public class PropertyGrid : UserControl
             _gridMain.Children.Add(ctrlTextContainer);
 
             // Create and configure row editor
-            var ctrlValueEdit = editControlFactory.CreateControl(actProperty, _propertyGridVM.PropertyMetadata);
+            var ctrlValueEdit = editControlFactory.CreateControl(actProperty.Metadata, nameof(actProperty.ValueAccessor), allPropertiesMetadata);
             if (ctrlValueEdit != null)
             {
                 _gridMain.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
@@ -150,7 +151,7 @@ public class PropertyGrid : UserControl
                 ctrlValueEdit.SetValue(Grid.RowProperty, actRowIndex);
                 ctrlValueEdit.SetValue(Grid.ColumnProperty, 1);
                 ctrlValueEdit.DataContext = actProperty;
-                SetToolTip(ctrlValueEdit, actProperty.Description);
+                SetToolTip(ctrlValueEdit, actProperty.Metadata.Description);
                 _gridMain.Children.Add(ctrlValueEdit);
 
                 _firstValueRowEditor ??= ctrlValueEdit;

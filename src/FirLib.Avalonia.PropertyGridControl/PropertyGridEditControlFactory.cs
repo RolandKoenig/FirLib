@@ -9,21 +9,22 @@ public class PropertyGridEditControlFactory
 {
     public virtual Control CreateControl(
         ConfigurablePropertyMetadata property, 
+        string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {
         Control? ctrlValueEdit = null;
         switch (property.ValueType)
         {
             case PropertyValueType.Bool:
-                ctrlValueEdit = this.CreateCheckBoxControl(property, allProperties);
+                ctrlValueEdit = this.CreateCheckBoxControl(property, valuePropertyNameForBinding, allProperties);
                 break;
 
             case PropertyValueType.String:
-                ctrlValueEdit = this.CreateTextBoxControl(property, allProperties);
+                ctrlValueEdit = this.CreateTextBoxControl(property, valuePropertyNameForBinding, allProperties);
                 break;
 
             case PropertyValueType.Enum:
-                ctrlValueEdit = this.CreateEnumControl(property, allProperties);
+                ctrlValueEdit = this.CreateEnumControl(property, valuePropertyNameForBinding, allProperties);
                 break;
 
             default:
@@ -35,11 +36,12 @@ public class PropertyGridEditControlFactory
 
     protected virtual Control CreateCheckBoxControl(
         ConfigurablePropertyMetadata property, 
+        string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {
         var ctrlCheckBox = new CheckBox();
         ctrlCheckBox[!ToggleButton.IsCheckedProperty] = new Binding(
-            nameof(property.ValueAccessor),
+            nameof(ConfigurablePropertyRuntime.ValueAccessor),
             BindingMode.TwoWay);
         ctrlCheckBox.HorizontalAlignment = HorizontalAlignment.Left;
         ctrlCheckBox.IsEnabled = !property.IsReadOnly;
@@ -48,11 +50,12 @@ public class PropertyGridEditControlFactory
 
     protected virtual Control CreateTextBoxControl(
         ConfigurablePropertyMetadata property,
+        string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {
         var ctrlTextBox = new TextBox();
         ctrlTextBox[!TextBox.TextProperty] = new Binding(
-            nameof(property.ValueAccessor),
+            nameof(ConfigurablePropertyRuntime.ValueAccessor),
             BindingMode.TwoWay);
         ctrlTextBox.Width = double.NaN;
         ctrlTextBox.IsReadOnly = property.IsReadOnly;
@@ -62,12 +65,13 @@ public class PropertyGridEditControlFactory
 
     protected virtual Control CreateEnumControl(
         ConfigurablePropertyMetadata property,
+        string valuePropertyNameForBinding,
         IEnumerable<ConfigurablePropertyMetadata> allProperties)
     {
         var ctrlComboBox = new ComboBox();
         ctrlComboBox.Items = property.GetEnumMembers();
         ctrlComboBox[!SelectingItemsControl.SelectedItemProperty] = new Binding(
-            nameof(property.ValueAccessor),
+            nameof(ConfigurablePropertyRuntime.ValueAccessor),
             BindingMode.TwoWay);
         ctrlComboBox.Width = double.NaN;
         ctrlComboBox.IsEnabled = !property.IsReadOnly;

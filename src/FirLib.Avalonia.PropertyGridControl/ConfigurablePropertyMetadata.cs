@@ -1,42 +1,11 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using FirLib.Avalonia.PropertyGridControl.Mvvm;
 
 namespace FirLib.Avalonia.PropertyGridControl;
 
-public class ConfigurablePropertyMetadata : ValidatableViewModelBase
+public class ConfigurablePropertyMetadata
 {
-    private object _hostObject;
     private IPropertyContractResolver? _propertyContractResolver;
     private PropertyDescriptor _descriptor;
-
-    public object? ValueAccessor
-    {
-        get => this.GetValue();
-        set
-        {
-            if (value != this.GetValue())
-            {
-                try
-                {
-                    this.SetValue(value);
-
-                    this.RaisePropertyChanged(nameof(this.ValueAccessor));
-                    this.RaisePropertyChanged(
-                        nameof(this
-                            .ValueAccessor)); // <-- Call this twice because otherwise 'TextAndHexadecimal" edit control works not correctly
-                }
-                catch (Exception e)
-                {
-                    this.SetError(nameof(this.ValueAccessor), e.Message);
-                    this.RaisePropertyChanged(nameof(this.ValueAccessor));
-                    return;
-                }
-
-                this.ValidateCurrentValue();
-            }
-        }
-    }
 
     public string CategoryName { get; set; }
 
@@ -50,13 +19,16 @@ public class ConfigurablePropertyMetadata : ValidatableViewModelBase
 
     public string Description { get; set; }
 
-    public Type HostObjectType => _hostObject.GetType();
+    public Type HostObjectType { get; }
 
-    internal ConfigurablePropertyMetadata(PropertyDescriptor propertyInfo, object hostObject,
+    public ConfigurablePropertyMetadata(
+        PropertyDescriptor propertyInfo,
+        Type hostObjectType,
         IPropertyContractResolver? propertyContractResolver)
     {
+        this.HostObjectType = hostObjectType;
+
         _descriptor = propertyInfo;
-        _hostObject = hostObject;
         _propertyContractResolver = propertyContractResolver;
 
         var categoryAttrib = this.GetCustomAttribute<CategoryAttribute>();
@@ -93,8 +65,6 @@ public class ConfigurablePropertyMetadata : ValidatableViewModelBase
         {
             this.ValueType = PropertyValueType.Unsupported;
         }
-
-        this.ValidateCurrentValue();
     }
 
     public override string ToString()
@@ -110,34 +80,6 @@ public class ConfigurablePropertyMetadata : ValidatableViewModelBase
                 $"Method {nameof(this.GetEnumMembers)} not supported on value type {this.ValueType}!");
         }
         return Enum.GetValues(_descriptor.PropertyType);
-    }
-
-    public object? GetValue()
-    {
-        return _descriptor.GetValue(_hostObject);
-    }
-
-    public void SetValue(object? value)
-    {
-        if (value == null)
-        {
-            var targetType = _descriptor.PropertyType;
-            if (targetType.IsValueType) { _descriptor.SetValue(_hostObject, Activator.CreateInstance(targetType)); }
-            else { _descriptor.SetValue(_hostObject, null); }
-        }
-        else
-        {
-            var givenType = value.GetType();
-            var targetType = _descriptor.PropertyType;
-            if (givenType == targetType)
-            {
-                _descriptor.SetValue(_hostObject, value);
-            }
-            else
-            {
-                _descriptor.SetValue(_hostObject, Convert.ChangeType(value, targetType));
-            }
-        }
     }
 
     public T? GetCustomAttribute<T>()
@@ -159,29 +101,5 @@ public class ConfigurablePropertyMetadata : ValidatableViewModelBase
         }
 
         return null;
-    }
-
-    private void ValidateCurrentValue()
-    {
-        var errorsFound = false;
-        var ctx = new ValidationContext(_hostObject);
-        ctx.DisplayName = this.PropertyDisplayName;
-        ctx.MemberName = this.PropertyName;
-        foreach (var actAttrib in _descriptor.Attributes)
-        {
-            if (!(actAttrib is ValidationAttribute actValidAttrib)) { continue; }
-
-            var validationResult = actValidAttrib.GetValidationResult(this.ValueAccessor, ctx);
-            if (validationResult != null)
-            {
-                this.SetError(nameof(this.ValueAccessor), validationResult.ErrorMessage ?? "Unknown");
-                errorsFound = true;
-            }
-        }
-
-        if (!errorsFound)
-        {
-            this.RemoveErrors(nameof(this.ValueAccessor));
-        }
     }
 }
