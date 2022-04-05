@@ -1,10 +1,11 @@
-﻿using Avalonia;
+﻿using System.Collections.Generic;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.Media;
 
-namespace FirLib.Avalonia.CommonControls;
+namespace FirLib.Core.Avalonia.Controls;
 
 public class DialogHostControl : Grid
 {

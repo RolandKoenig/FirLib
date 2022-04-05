@@ -52,8 +52,7 @@
                    Background="#0975C6"/>
         </Grid>
 
-        <local:DialogHostControl Grid.Row="1" 
-                                 Name="CtrlDialogHost"
-                                 OccludedControl="{Binding ElementName=CtrlMainGrid}" />
+        <Panel x:Name="CtrlOverlay"
+               Grid.Row="1" />
     </Grid>
 </UserControl>

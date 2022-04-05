@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FirLib.Avalonia.CommonControls;
+using FirLib.Core.Avalonia.Controls;
 using FirLib.Core.Patterns.Mvvm;
 
 namespace FirLib.Core.ViewServices.MessageBox;

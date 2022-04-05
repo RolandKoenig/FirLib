@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using System.Threading.Tasks;
 using Avalonia.Markup.Xaml;
-using FirLib.Avalonia.CommonControls;
+using FirLib.Core.Avalonia.Controls;
 
 // Simple message box implementation
 // Based on: https://stackoverflow.com/questions/55706291/how-to-show-a-message-box-in-avaloniaui-beta

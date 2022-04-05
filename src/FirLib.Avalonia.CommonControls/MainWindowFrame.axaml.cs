@@ -24,13 +24,17 @@ public class MainWindowFrame : UserControl
     private Panel _ctrlMainContentArea;
     private Panel _ctrlFooterArea;
     private Panel _ctrlStatusBar;
+    private Panel _ctrlOverlay;
 
     public Controls CustomTitleArea => _ctrlCustomTitleArea.Children;
+
     public Controls HeaderArea => _ctrlHeaderArea.Children;
+
     public Controls MainContentArea => _ctrlMainContentArea.Children;
+
     public Controls FooterArea => _ctrlFooterArea.Children;
 
-    public DialogHostControl DialogHostControl { get; }
+    public Controls OverlayArea => _ctrlOverlay.Children;
 
     public MainWindowFrameStatus Status
     {
@@ -49,7 +53,7 @@ public class MainWindowFrame : UserControl
         _ctrlMainContentArea = this.Find<Panel>("CtrlMainContentArea");
         _ctrlFooterArea = this.Find<Panel>("CtrlFooterArea");
         _ctrlStatusBar = this.Find<Panel>("CtrlStatusBar");
-        this.DialogHostControl = this.Find<DialogHostControl>("CtrlDialogHost");
+        _ctrlOverlay = this.Find<Panel>("CtrlOverlay");
     }
 
     private void InitializeComponent()
