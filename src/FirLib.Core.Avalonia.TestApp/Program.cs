@@ -16,6 +16,5 @@ internal class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .LogToTrace()
-            .UseFirLibEnvironment();
+            .LogToTrace();
 }
