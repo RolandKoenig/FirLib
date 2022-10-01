@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using FirLib.Core.Dialogs;
-using FirLib.Core.Infrastructure;
+using FirLib.Core.Patterns;
 using FirLib.Core.Patterns.ErrorAnalysis;
-using FirLib.Core.Patterns.Messaging;
 using Application = System.Windows.Application;
 using IWin32Window = System.Windows.Forms.IWin32Window;
 
@@ -19,27 +14,12 @@ namespace FirLib.Core;
 
 public static partial class FirLibExtensionsWpf
 {
-    public static FirLibApplicationLoader AttachToWpfEnvironment(this FirLibApplicationLoader loader)
+    public static IDisposable AttachUnhandledExceptionListener(this Application application)
     {
-        var uiMessenger = new FirLibMessenger();
+        application.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
 
-        loader.AddLoadAction(() =>
-        {
-            Application.Current.DispatcherUnhandledException += CurrentOnDispatcherUnhandledException;
-
-            uiMessenger.CustomSynchronizationContextEqualityChecker = CheckForEqualSynchronizationContexts;
-            uiMessenger.ConnectToGlobalMessaging(
-                FirLibMessengerThreadingBehavior.EnsureMainSyncContextOnSyncCalls,
-                FirLibConstants.MESSENGER_NAME_GUI,
-                SynchronizationContext.Current);
-        });
-        loader.AddUnloadAction(() =>
-        {
-            Application.Current.DispatcherUnhandledException -= CurrentOnDispatcherUnhandledException;
-            uiMessenger.DisconnectFromGlobalMessaging();
-        });
-            
-        return loader;
+        return new DummyDisposable(
+            () => application.DispatcherUnhandledException -= CurrentOnDispatcherUnhandledException);
     }
 
     private static bool CheckForEqualSynchronizationContexts(SynchronizationContext givenLeft, SynchronizationContext givenRight)

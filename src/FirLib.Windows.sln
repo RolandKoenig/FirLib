@@ -49,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wpf", "Wpf", "{4D715882-724
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinForms", "WinForms", "{47F4C49F-FDD0-4B92-8C93-BB7D9056C8EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirLib.Avalonia.PropertyGridControl", "FirLib.Avalonia.PropertyGridControl\FirLib.Avalonia.PropertyGridControl.csproj", "{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Avalonia.PropertyGridControl", "FirLib.Avalonia.PropertyGridControl\FirLib.Avalonia.PropertyGridControl.csproj", "{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

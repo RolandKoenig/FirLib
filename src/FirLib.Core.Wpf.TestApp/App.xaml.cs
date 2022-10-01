@@ -1,26 +1,26 @@
 ﻿using System;
-using FirLib.Core;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using FirLib.Core.Infrastructure;
 
-namespace FirLib.Tests.Wpf;
+namespace FirLib.Core.Wpf.TestApp;
 
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application
 {
-    /// <inheritdoc />
+    private IDisposable? _unhandledExceptionDisposable;
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        // Initialize base application logic
-        FirLibApplication.GetLoader()
-            .AttachToWpfEnvironment()
-            .Load();
+        _unhandledExceptionDisposable = this.AttachUnhandledExceptionListener();
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+         
+        _unhandledExceptionDisposable?.Dispose();
     }
 }

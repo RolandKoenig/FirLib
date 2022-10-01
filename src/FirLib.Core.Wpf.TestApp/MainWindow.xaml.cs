@@ -1,6 +1,6 @@
 ﻿using FirLib.Core.Patterns.Mvvm;
 
-namespace FirLib.Tests.Wpf;
+namespace FirLib.Core.Wpf.TestApp;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using FirLib.Core.Patterns;
 using FirLib.Core.Patterns.Mvvm;
 
-namespace FirLib.Tests.Wpf;
+namespace FirLib.Core.Wpf.TestApp;
 
 public class MainWindowViewModel : ViewModelBase
 {
