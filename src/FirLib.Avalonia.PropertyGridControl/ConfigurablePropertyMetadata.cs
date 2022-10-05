@@ -57,6 +57,10 @@ public class ConfigurablePropertyMetadata
         {
             this.ValueType = PropertyValueType.String;
         }
+        else if (propertyType == typeof(bool))
+        {
+            this.ValueType = PropertyValueType.Bool;
+        }
         else if (propertyType.IsSubclassOf(typeof(Enum)))
         {
             this.ValueType = PropertyValueType.Enum;
