@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FirLib.Core.Patterns.ErrorAnalysis.Analyzers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -30,7 +27,7 @@ public class Analyzer
 
         Assert.IsNotNull(infos);
 
-        var infoDict = TestUtilities.ToDictionary(infos);
+        var infoDict = TestUtilities.ToDictionary(infos!);
         Assert.AreEqual(0, innerExceptions?.Count() ?? 0, "Inner exceptions");
         Assert.AreEqual("System.ApplicationException", infoDict["Type"], "Type");
         Assert.AreEqual("Dummy Exception", infoDict["Message"], "Message");
