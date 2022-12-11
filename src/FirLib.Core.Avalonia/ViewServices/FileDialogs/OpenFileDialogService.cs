@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using FirLib.Core.Patterns.Mvvm;
@@ -18,16 +16,22 @@ public class OpenFileDialogService : ViewServiceBase, IOpenFileViewService
     }
 
     /// <inheritdoc />
-    public async Task<string?> ShowOpenFileDialogAsync(IEnumerable<FileDialogFilter> filters, string defaultExtension)
+    public async Task<string?> ShowOpenFileDialogAsync(IReadOnlyList<FileDialogFilter> filters, string defaultExtension)
     {
         var dlgOpenFile = new OpenFileDialog();
-        foreach (var actFilter in filters)
+
+        if (filters.Count > 0)
         {
-            var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
-            actAvaloniaFilter.Name = actFilter.Name;
-            actAvaloniaFilter.Extensions = actFilter.Extensions;
-            dlgOpenFile.Filters.Add(actAvaloniaFilter);
+            dlgOpenFile.Filters ??= new List<global::Avalonia.Controls.FileDialogFilter>(filters.Count);
+            foreach (var actFilter in filters)
+            {
+                var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
+                actAvaloniaFilter.Name = actFilter.Name;
+                actAvaloniaFilter.Extensions = actFilter.Extensions;
+                dlgOpenFile.Filters.Add(actAvaloniaFilter);
+            }
         }
+
         dlgOpenFile.AllowMultiple = false;
 
         var selectedFiles = await dlgOpenFile.ShowAsync(_parent);
@@ -43,16 +47,22 @@ public class OpenFileDialogService : ViewServiceBase, IOpenFileViewService
     }
 
     /// <inheritdoc />
-    public async Task<string[]?> ShowOpenMultipleFilesDialogAsync(IEnumerable<FileDialogFilter> filters, string title)
+    public async Task<string[]?> ShowOpenMultipleFilesDialogAsync(IReadOnlyList<FileDialogFilter> filters, string title)
     {
         var dlgSaveFile = new OpenFileDialog();
-        foreach (var actFilter in filters)
+        
+        if (filters.Count > 0)
         {
-            var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
-            actAvaloniaFilter.Name = actFilter.Name;
-            actAvaloniaFilter.Extensions = actFilter.Extensions;
-            dlgSaveFile.Filters.Add(actAvaloniaFilter);
+            dlgSaveFile.Filters ??= new List<global::Avalonia.Controls.FileDialogFilter>(filters.Count);
+            foreach (var actFilter in filters)
+            {
+                var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
+                actAvaloniaFilter.Name = actFilter.Name;
+                actAvaloniaFilter.Extensions = actFilter.Extensions;
+                dlgSaveFile.Filters.Add(actAvaloniaFilter);
+            }
         }
+
         dlgSaveFile.AllowMultiple = true;
 
         var selectedFiles = await dlgSaveFile.ShowAsync(_parent);

@@ -9,7 +9,7 @@ namespace FirLib.Core.ViewServices;
 
 public interface IOpenFileViewService : IViewService
 {
-    Task<string?> ShowOpenFileDialogAsync(IEnumerable<FileDialogFilter> filters, string title);
+    Task<string?> ShowOpenFileDialogAsync(IReadOnlyList<FileDialogFilter> filters, string title);
 
-    Task<string[]?> ShowOpenMultipleFilesDialogAsync(IEnumerable<FileDialogFilter> filters, string title);
+    Task<string[]?> ShowOpenMultipleFilesDialogAsync(IReadOnlyList<FileDialogFilter> filters, string title);
 }

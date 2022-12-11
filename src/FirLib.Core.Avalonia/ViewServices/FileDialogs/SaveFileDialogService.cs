@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using FirLib.Core.Patterns.Mvvm;
@@ -17,16 +16,22 @@ public class SaveFileDialogService : ViewServiceBase, ISaveFileViewService
     }
 
     /// <inheritdoc />
-    public Task<string?> ShowSaveFileDialogAsync(IEnumerable<FileDialogFilter> filters, string defaultExtension)
+    public Task<string?> ShowSaveFileDialogAsync(IReadOnlyList<FileDialogFilter> filters, string defaultExtension)
     {
         var dlgSaveFile = new SaveFileDialog();
-        foreach (var actFilter in filters)
+
+        if (filters.Count > 0)
         {
-            var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
-            actAvaloniaFilter.Name = actFilter.Name;
-            actAvaloniaFilter.Extensions = actFilter.Extensions;
-            dlgSaveFile.Filters.Add(actAvaloniaFilter);
+            dlgSaveFile.Filters ??= new List<global::Avalonia.Controls.FileDialogFilter>(filters.Count);
+            foreach (var actFilter in filters)
+            {
+                var actAvaloniaFilter = new global::Avalonia.Controls.FileDialogFilter();
+                actAvaloniaFilter.Name = actFilter.Name;
+                actAvaloniaFilter.Extensions = actFilter.Extensions;
+                dlgSaveFile.Filters.Add(actAvaloniaFilter);
+            }
         }
+
         dlgSaveFile.DefaultExtension = defaultExtension;
 
         return dlgSaveFile.ShowAsync(_parent);
