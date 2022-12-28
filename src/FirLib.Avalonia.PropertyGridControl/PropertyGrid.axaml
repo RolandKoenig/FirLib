@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="using:FirLib.Avalonia.PropertyGridControl"
              mc:Ignorable="d"
              x:Class="FirLib.Avalonia.PropertyGridControl.PropertyGrid"
              d:DesignHeight="300"
@@ -17,10 +16,8 @@
             <Setter Property="Margin" Value="2" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalAlignment" Value="Center" />
-            <!--<Setter Property="MinHeight" Value="24" />-->
         </Style>
         <Style Selector="ComboBoxItem">
-            <!--<Setter Property="MinHeight" Value="24" />-->
         </Style>
         <Style Selector="TextBox">
             <Setter Property="Margin" Value="2" />
@@ -31,7 +28,8 @@
     <ScrollViewer>
         <Grid x:Name="GridMain">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="3" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>

@@ -105,7 +105,7 @@ public class PropertyGrid : UserControl
                 };
 
                 txtHeader.SetValue(Grid.RowProperty, actRowIndex);
-                txtHeader.SetValue(Grid.ColumnSpanProperty, 2);
+                txtHeader.SetValue(Grid.ColumnSpanProperty, 3);
                 txtHeader.SetValue(Grid.ColumnProperty, 0);
                 txtHeader.Margin = new Thickness(5d, 5d, 5d, 5d);
                 txtHeader.VerticalAlignment = VerticalAlignment.Bottom;
@@ -121,7 +121,7 @@ public class PropertyGrid : UserControl
                 rect.Classes.Add("PropertyGridCategoryHeaderLine");
 
                 rect.SetValue(Grid.RowProperty, actRowIndex);
-                rect.SetValue(Grid.ColumnSpanProperty, 2);
+                rect.SetValue(Grid.ColumnSpanProperty, 3);
                 rect.SetValue(Grid.ColumnProperty, 0);
                 _gridMain.Children.Add(rect);
 
@@ -149,7 +149,7 @@ public class PropertyGrid : UserControl
                 ctrlValueEdit.Margin = new Thickness(0d, 0d, 5d, 0d);
                 ctrlValueEdit.VerticalAlignment = VerticalAlignment.Center;
                 ctrlValueEdit.SetValue(Grid.RowProperty, actRowIndex);
-                ctrlValueEdit.SetValue(Grid.ColumnProperty, 1);
+                ctrlValueEdit.SetValue(Grid.ColumnProperty, 2);
                 ctrlValueEdit.DataContext = actProperty;
                 SetToolTip(ctrlValueEdit, actProperty.Metadata.Description);
                 _gridMain.Children.Add(ctrlValueEdit);
@@ -162,6 +162,17 @@ public class PropertyGrid : UserControl
             }
 
             actRowIndex++;
+        }
+
+        if (_gridMain.RowDefinitions.Count > 0)
+        {
+            var gridSplitter = new GridSplitter();
+            gridSplitter.SetValue(Grid.ColumnProperty, 1);
+            gridSplitter.SetValue(Grid.RowSpanProperty, _gridMain.RowDefinitions.Count);
+            gridSplitter.HorizontalAlignment = HorizontalAlignment.Stretch;
+            gridSplitter.VerticalAlignment = VerticalAlignment.Stretch;
+            gridSplitter.Background = Brushes.Transparent;
+            _gridMain.Children.Insert(0, gridSplitter);
         }
     }
 
