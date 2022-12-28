@@ -37,6 +37,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{57
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FirLib.Avalonia.PropertyGridControl", "FirLib.Avalonia.PropertyGridControl\FirLib.Avalonia.PropertyGridControl.csproj", "{0C76E926-9D10-4254-9CEB-A5F4C0AE276B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{5E31B622-8FF1-431D-88D8-EF9F7302F306}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{CF85C290-78D5-447F-893A-1B000BCEF39F}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\ci-build.yml = ..\.github\workflows\ci-build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +98,8 @@ Global
 		{4D4BB4A3-F4CE-459C-A152-1809F4C6F44E} = {7CAD234E-029D-4D10-BDE4-3A3F7C864D1D}
 		{B17D5B58-BAA3-4736-B857-417E07BF295F} = {573F3D81-BEDB-4D3C-AB69-70DC8E54FE68}
 		{573F3D81-BEDB-4D3C-AB69-70DC8E54FE68} = {16C8C819-87BC-4995-95A2-FCB3F4521D9C}
+		{5E31B622-8FF1-431D-88D8-EF9F7302F306} = {7CAD234E-029D-4D10-BDE4-3A3F7C864D1D}
+		{CF85C290-78D5-447F-893A-1B000BCEF39F} = {5E31B622-8FF1-431D-88D8-EF9F7302F306}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09E3A6D8-B5AD-4FAF-8C45-F5A664246856}
