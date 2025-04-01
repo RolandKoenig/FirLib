@@ -19,7 +19,7 @@ internal class WpfOpenFileDialogService : ViewServiceBase, IOpenFileViewService
     }
 
     /// <inheritdoc />
-    public Task<string?> ShowOpenFileDialogAsync(IEnumerable<FileDialogFilter> filters, string title)
+    public Task<string?> ShowOpenFileDialogAsync(IReadOnlyList<FileDialogFilter> filters, string title)
     {
         var dlgOpenFile = new OpenFileDialog();
         dlgOpenFile.Title = title;
@@ -36,7 +36,7 @@ internal class WpfOpenFileDialogService : ViewServiceBase, IOpenFileViewService
     }
 
     /// <inheritdoc />
-    public Task<string[]?> ShowOpenMultipleFilesDialogAsync(IEnumerable<FileDialogFilter> filters, string title)
+    public Task<string[]?> ShowOpenMultipleFilesDialogAsync(IReadOnlyList<FileDialogFilter> filters, string title)
     {
         var dlgOpenFile = new OpenFileDialog();
         dlgOpenFile.Title = title;
